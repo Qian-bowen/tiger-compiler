@@ -14,7 +14,7 @@ class Scanner : public ScannerBase {
 public:
   Scanner() = delete;
   explicit Scanner(std::string_view fname, std::ostream &out = std::cout)
-      : ScannerBase(std::cin, out), comment_level_(0), char_pos_(1),
+      : ScannerBase(std::cin, out), comment_level_(1), char_pos_(1),
         errormsg_(std::make_unique<err::ErrorMsg>(fname)) {
     switchStreams(errormsg_->infile_, out);
   }

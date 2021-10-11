@@ -178,6 +178,7 @@
 
 
 \/\* {
+  comment_level_++;
   begin(StartCondition__::COMMENT);
   adjust();
 }
@@ -185,7 +186,7 @@
 <COMMENT> {
   \*\/ {
     comment_level_--;
-    if(comment_level_==0) {
+    if(comment_level_==1) {
       begin(StartCondition__::INITIAL);
     }
     adjust();
@@ -193,6 +194,7 @@
 
   \/\* {
     comment_level_++;
+    begin(StartCondition__::COMMENT);
     adjust();
   }
 
