@@ -177,28 +177,27 @@
 }
 
 
-\/\* {
+"/*" {
   comment_level_++;
   begin(StartCondition__::COMMENT);
   adjust();
 }
 
 <COMMENT> {
-  \*\/ {
+  "*/" {
     comment_level_--;
     if(comment_level_==1) {
       begin(StartCondition__::INITIAL);
     }
-    adjust();
+    adjustStr();
   }
 
-  \/\* {
+  "/*" {
     comment_level_++;
-    begin(StartCondition__::COMMENT);
-    adjust();
+    adjustStr();
   }
 
-  .|\n {adjust();}
+  .|\n {adjustStr();}
 }
 
 
