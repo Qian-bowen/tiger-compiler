@@ -42,6 +42,7 @@ test_lab2() {
     local ref=${ref_dir}/${testcase_name}.out
 
     ./test_lex "$testcase" >&/tmp/output.txt
+    ./test_lex "$testcase" >qbw.txt
     diff /tmp/output.txt "${ref}"
     if [[ $? != 0 ]]; then
       echo "Error: Output mismatch"
