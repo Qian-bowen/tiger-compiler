@@ -69,10 +69,7 @@ test_lab3() {
     ./test_parse "$testcase" >&/tmp/output.txt
     res_run=$?
     
-    echo $testcase_name
-    if [[ $testcase_name != "test1" ]] ;then
-      continue 
-    fi
+
 
     # Check result of the run
     if [[ $testcase_name == "test49" ]]; then
