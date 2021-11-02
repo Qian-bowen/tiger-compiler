@@ -5,6 +5,7 @@
 #include <cassert>
 #include <string>
 #include <list>
+#include <iostream>
 
 namespace A {
 
@@ -13,7 +14,6 @@ class Exp;
 class ExpList;
 
 enum BinOp { PLUS = 0, MINUS, TIMES, DIV };
-
 // some data structures used by interp
 class Table;
 class IntAndTable;
@@ -56,15 +56,22 @@ class PrintStm : public Stm {
 };
 
 class Exp {
+  public:
+    virtual int MaxArgs() const = 0;
+    virtual IntAndTable InterExp(Table * t) const=0;
+
   // TODO: you'll have to add some definitions here (lab1).
   // Hints: You may add interfaces like `int MaxArgs()`,
   //        and ` IntAndTable *Interp(Table *)`
+
 };
 
 class IdExp : public Exp {
  public:
   explicit IdExp(std::string id) : id(std::move(id)) {}
   // TODO: you'll have to add some definitions here (lab1).
+  int MaxArgs() const override{return 0;}
+  IntAndTable InterExp(Table * t) const override;
 
  private:
   std::string id;
@@ -74,6 +81,9 @@ class NumExp : public Exp {
  public:
   explicit NumExp(int num) : num(num) {}
   // TODO: you'll have to add some definitions here.
+  int MaxArgs() const override{return 0;}
+  IntAndTable InterExp(Table * t) const override;
+
 
  private:
   int num;
@@ -83,6 +93,9 @@ class OpExp : public Exp {
  public:
   OpExp(Exp *left, BinOp oper, Exp *right)
       : left(left), oper(oper), right(right) {}
+  int MaxArgs() const override;
+  IntAndTable InterExp(Table * t) const override;
+
 
  private:
   Exp *left;
@@ -93,6 +106,8 @@ class OpExp : public Exp {
 class EseqExp : public Exp {
  public:
   EseqExp(Stm *stm, Exp *exp) : stm(stm), exp(exp) {}
+  int MaxArgs() const override;
+  IntAndTable InterExp(Table * t) const override;
 
  private:
   Stm *stm;
@@ -101,6 +116,7 @@ class EseqExp : public Exp {
 
 class ExpList {
  public:
+  virtual void GetAllExps(std::list<Exp*>& exp_list)const=0;
   // TODO: you'll have to add some definitions here (lab1).
   // Hints: You may add interfaces like `int MaxArgs()`, `int NumExps()`,
   //        and ` IntAndTable *Interp(Table *)`
@@ -110,6 +126,7 @@ class PairExpList : public ExpList {
  public:
   PairExpList(Exp *exp, ExpList *tail) : exp(exp), tail(tail) {}
   // TODO: you'll have to add some definitions here (lab1).
+  void GetAllExps(std::list<Exp*>& exp_list)const override;
  private:
   Exp *exp;
   ExpList *tail;
@@ -119,6 +136,7 @@ class LastExpList : public ExpList {
  public:
   LastExpList(Exp *exp) : exp(exp) {}
   // TODO: you'll have to add some definitions here (lab1).
+  void GetAllExps(std::list<Exp*>& exp_list)const override;
  private:
   Exp *exp;
 };
