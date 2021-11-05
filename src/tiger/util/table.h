@@ -10,6 +10,7 @@ public:
   Table() : top_(nullptr), table_() {}
   void Enter(KeyType *key, ValueType *value);
   ValueType *Look(KeyType *key);
+  bool IsExist(KeyType *key);
   void Set(KeyType *key, ValueType *value);
   KeyType *Pop();
   void Dump(std::function<void(KeyType *, ValueType *)> show);
@@ -47,6 +48,17 @@ ValueType *Table<KeyType, ValueType>::Look(KeyType *key) {
     if (b->key == key)
       return b->value;
   return nullptr;
+}
+template <typename KeyType, typename ValueType>
+bool Table<KeyType, ValueType>::IsExist(KeyType *key)
+{
+  assert(key);
+  unsigned long index = reinterpret_cast<unsigned long>(key) % TABSIZE;
+  Binder *b;
+  for (b = table_[index]; b; b = b->next)
+    if (b->key == key)
+      return true;
+  return false;
 }
 
 template <typename KeyType, typename ValueType>

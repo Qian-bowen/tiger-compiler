@@ -37,13 +37,23 @@ public:
   Table() : tab::Table<Symbol, ValueType>() {}
   void BeginScope();
   void EndScope();
+  void BeginLoopScope();
+  void EndLoopScope();
+  bool IsWithinLoop();
+  // sym::Symbol* getLoopSymbol(){return &markloop_;}
 
 private:
   Symbol marksym_ = {"<mark>", nullptr};
+  Symbol markloop_ = {"<loop>", nullptr};
 };
 
 template <typename ValueType> void Table<ValueType>::BeginScope() {
   this->Enter(&marksym_, nullptr);
+}
+
+template <typename ValueType> void Table<ValueType>::BeginLoopScope() {
+  this->Enter(&marksym_, nullptr);
+  this->Enter(&markloop_, nullptr);
 }
 
 template <typename ValueType> void Table<ValueType>::EndScope() {
@@ -51,6 +61,21 @@ template <typename ValueType> void Table<ValueType>::EndScope() {
   do
     s = this->Pop();
   while (s != &marksym_);
+}
+
+template <typename ValueType> void Table<ValueType>::EndLoopScope() {
+  Symbol *s;
+  do
+    s = this->Pop();
+  while (s != &marksym_);
+}
+
+template <typename ValueType> bool Table<ValueType>::IsWithinLoop() {
+  if(!this->IsExist(&markloop_))
+  {
+    return false;
+  }
+  return true;
 }
 
 } // namespace sym
