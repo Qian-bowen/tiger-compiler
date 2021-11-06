@@ -16,6 +16,10 @@ class Ty;
 } // namespace type
 
 namespace sym {
+
+//LOOP_SCOPE contains FOR_SCOPE and WHILE_SCOPE
+enum scope_{PLAIN_SCOPE,FOR_SCOPE,WHILE_SCOPE,LOOP_SCOPE};
+
 class Symbol {
   template <typename ValueType> friend class Table;
 
@@ -35,25 +39,35 @@ template <typename ValueType>
 class Table : public tab::Table<Symbol, ValueType> {
 public:
   Table() : tab::Table<Symbol, ValueType>() {}
-  void BeginScope();
+  void BeginScope(scope_ scope_mark);
   void EndScope();
-  void BeginLoopScope();
-  void EndLoopScope();
-  bool IsWithinLoop();
+  bool IsWithinScope(scope_ scope_mark);
   // sym::Symbol* getLoopSymbol(){return &markloop_;}
 
 private:
   Symbol marksym_ = {"<mark>", nullptr};
+  
   Symbol markloop_ = {"<loop>", nullptr};
+  Symbol markfor_ = {"<for>", nullptr};
+  Symbol markwhile_ = {"<while>", nullptr};
 };
 
-template <typename ValueType> void Table<ValueType>::BeginScope() {
+template <typename ValueType> void Table<ValueType>::BeginScope(scope_ scope_mark) {
   this->Enter(&marksym_, nullptr);
-}
-
-template <typename ValueType> void Table<ValueType>::BeginLoopScope() {
-  this->Enter(&marksym_, nullptr);
-  this->Enter(&markloop_, nullptr);
+  if(scope_mark==scope_::FOR_SCOPE)
+  {
+    this->Enter(&markloop_, nullptr);
+    this->Enter(&markfor_, nullptr);
+  }
+  else if(scope_mark==scope_::WHILE_SCOPE)
+  {
+    this->Enter(&markloop_, nullptr);
+    this->Enter(&markwhile_, nullptr);
+  }
+  else if(scope_mark==scope_::LOOP_SCOPE)
+  {
+    this->Enter(&markloop_, nullptr);
+  }
 }
 
 template <typename ValueType> void Table<ValueType>::EndScope() {
@@ -63,19 +77,21 @@ template <typename ValueType> void Table<ValueType>::EndScope() {
   while (s != &marksym_);
 }
 
-template <typename ValueType> void Table<ValueType>::EndLoopScope() {
-  Symbol *s;
-  do
-    s = this->Pop();
-  while (s != &marksym_);
-}
-
-template <typename ValueType> bool Table<ValueType>::IsWithinLoop() {
-  if(!this->IsExist(&markloop_))
+template <typename ValueType> bool Table<ValueType>::IsWithinScope(scope_ scope_mark) {
+  bool flag=false;
+  if(scope_mark==scope_::FOR_SCOPE)
   {
-    return false;
+    flag=this->IsExist(&markfor_);
   }
-  return true;
+  else if(scope_mark==scope_::LOOP_SCOPE)
+  {
+    flag=this->IsExist(&markloop_);
+  }
+  else if(scope_mark==scope_::WHILE_SCOPE)
+  {
+    flag=this->IsExist(&markwhile_);
+  }
+  return flag;
 }
 
 } // namespace sym
