@@ -8,12 +8,12 @@ namespace tab {
 template <typename KeyType, typename ValueType> class Table {
 public:
   Table() : top_(nullptr), table_() {}
-  void Enter(KeyType *key, ValueType *value);
-  ValueType *Look(KeyType *key);
-  bool IsExist(KeyType *key);
-  void Set(KeyType *key, ValueType *value);
-  KeyType *Pop();
-  void Dump(std::function<void(KeyType *, ValueType *)> show);
+  virtual void Enter(KeyType *key, ValueType *value);
+  virtual ValueType *Look(KeyType *key);
+  virtual bool IsExist(KeyType *key);
+  virtual void Set(KeyType *key, ValueType *value);
+  virtual KeyType *Pop();
+  virtual void Dump(std::function<void(KeyType *, ValueType *)> show);
 
 protected:
   static const unsigned long TABSIZE = 127;

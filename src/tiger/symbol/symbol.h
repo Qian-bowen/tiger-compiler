@@ -19,6 +19,7 @@ namespace sym {
 
 //LOOP_SCOPE contains FOR_SCOPE and WHILE_SCOPE
 enum scope_{PLAIN_SCOPE,FOR_SCOPE,WHILE_SCOPE,LOOP_SCOPE};
+enum look_{EXACT_LARGER,EQUAL_LARGER,EXACT_THIS};
 
 class Symbol {
   template <typename ValueType> friend class Table;
@@ -42,9 +43,16 @@ public:
   void BeginScope(scope_ scope_mark);
   void EndScope();
   bool IsWithinScope(scope_ scope_mark);
-  // sym::Symbol* getLoopSymbol(){return &markloop_;}
+
+  //override parent function
+  //to check scope
+  void Enter(Symbol *key, ValueType *value)override;
+  void Set(Symbol *key, ValueType *value)override;
+
+  ValueType *LookScope(Symbol *key,look_ look=look_::EQUAL_LARGER);
 
 private:
+  int depth=0;//depth of scope
   Symbol marksym_ = {"<mark>", nullptr};
   
   Symbol markloop_ = {"<loop>", nullptr};
@@ -68,6 +76,7 @@ template <typename ValueType> void Table<ValueType>::BeginScope(scope_ scope_mar
   {
     this->Enter(&markloop_, nullptr);
   }
+  depth++;
 }
 
 template <typename ValueType> void Table<ValueType>::EndScope() {
@@ -75,6 +84,7 @@ template <typename ValueType> void Table<ValueType>::EndScope() {
   do
     s = this->Pop();
   while (s != &marksym_);
+  depth--;
 }
 
 template <typename ValueType> bool Table<ValueType>::IsWithinScope(scope_ scope_mark) {
@@ -92,6 +102,45 @@ template <typename ValueType> bool Table<ValueType>::IsWithinScope(scope_ scope_
     flag=this->IsExist(&markwhile_);
   }
   return flag;
+}
+
+template <typename ValueType> void Table<ValueType>::Enter(Symbol *key, ValueType *value)
+{
+  if(value) value->depth=this->depth;
+  tab::Table<Symbol, ValueType>::Enter(key,value);
+}
+
+template <typename ValueType> void Table<ValueType>::Set(Symbol *key, ValueType *value)
+{
+  if(value) value->depth=this->depth;
+  tab::Table<Symbol, ValueType>::Set(key,value);
+}
+
+/**
+ * @brief 
+ * this function do not check type, just search name in some scope
+ * default value of look is EQUAL_LARGERR in declaration
+ * for a element in table with depth i, all elements that can be searched have depth<=i, they are all popped
+ * since you cannot find depth>i,so there is no need to implement EQUAL_LARGER
+ * EXACT_THIS means you just look up in this scope
+ * @param key 
+ * @param look 
+ * @return template <typename ValueType>* 
+ */
+template <typename ValueType> ValueType* Table<ValueType>::LookScope(Symbol *key,look_ look)
+{
+  ValueType* vt=tab::Table<Symbol, ValueType>::Look(key);
+  if(vt==nullptr) return nullptr;
+
+  if(look==look_::EXACT_LARGER&&vt->depth>=depth)
+  {
+    return nullptr;
+  }
+  else if(look==look_::EXACT_THIS&&vt->depth!=depth)
+  {
+    return nullptr;
+  }
+  return vt;
 }
 
 } // namespace sym

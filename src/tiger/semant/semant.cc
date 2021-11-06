@@ -14,7 +14,7 @@ type::Ty *SimpleVar::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv,
                                 int labelcount, err::ErrorMsg *errormsg) const {
   /* TODO: Put your lab4 code here */
   sym::Symbol* s=this->sym_;
-  env::EnvEntry* ee=venv->Look(s);
+  env::EnvEntry* ee=venv->LookScope(s);
   if(ee && typeid(*ee)==typeid(env::VarEntry))
   {
     return (static_cast<env::VarEntry*>(ee))->ty_;
@@ -104,7 +104,7 @@ type::Ty *CallExp::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv,
                               int labelcount, err::ErrorMsg *errormsg) const {
   /* TODO: Put your lab4 code here */
   std::list<absyn::Exp*> el = this->args_->GetList();
-  env::EnvEntry* ee = venv->Look(this->func_);
+  env::EnvEntry* ee = venv->LookScope(this->func_);
   if(ee==nullptr)
   {
     errormsg->Error(this->pos_,"undefined function %s",this->func_->Name().data());
@@ -186,7 +186,7 @@ type::Ty *OpExp::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv,
 type::Ty *RecordExp::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv,
                                 int labelcount, err::ErrorMsg *errormsg) const {
   /* TODO: Put your lab4 code here */
-  type::Ty* ty = tenv->Look(this->typ_);
+  type::Ty* ty = tenv->LookScope(this->typ_);
   if(ty==nullptr)
   {
     errormsg->Error(this->pos_,"undefined type %s",this->typ_->Name().data());
@@ -242,7 +242,7 @@ type::Ty *AssignExp::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv,
     if(this->var_&&typeid(*(this->var_))==typeid(absyn::SimpleVar))
     {
       absyn::SimpleVar* sv=static_cast<absyn::SimpleVar*>(this->var_);
-      env::EnvEntry* sv_en = venv->Look(sv->sym_);
+      env::EnvEntry* sv_en = venv->LookScope(sv->sym_);
       if(sv_en->readonly_)
       {
         errormsg->Error(this->pos_,"loop variable can't be assigned");
@@ -352,7 +352,7 @@ type::Ty *ArrayExp::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv,
                                int labelcount, err::ErrorMsg *errormsg) const {
   /* TODO: Put your lab4 code here */
 
-  type::Ty* tt=tenv->Look(this->typ_);
+  type::Ty* tt=tenv->LookScope(this->typ_);
   if(tt==nullptr||typeid(*tt)!=typeid(type::ArrayTy))
   {
     errormsg->Error(this->pos_,"type not exist");
@@ -387,7 +387,7 @@ void FunctionDec::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv,
   for(const auto& function:fl)
   {
     //check name is same
-    if(nullptr!=venv->Look(function->name_))
+    if(nullptr!=venv->LookScope(function->name_,sym::look_::EXACT_THIS))
     {
       errormsg->Error(this->pos_,"two functions have the same name");
     }
@@ -396,7 +396,7 @@ void FunctionDec::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv,
     std::list<absyn::Field*> param_list = function->params_->GetList();
     for(const auto& field:param_list)
     {
-      type::Ty* ty=tenv->Look(field->typ_);
+      type::Ty* ty=tenv->LookScope(field->typ_);
       if(ty==nullptr)
       {
         errormsg->Error(this->pos_,"type not exist");
@@ -404,20 +404,23 @@ void FunctionDec::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv,
       ftl->Append(ty);
     }
     type::Ty* result_type=type::VoidTy::Instance();
-    if(function->result_) result_type = tenv->Look(function->result_);
+    if(function->result_) result_type = tenv->LookScope(function->result_);
     venv->Enter(function->name_,new env::FunEntry(ftl,result_type));
   }
 
   for(const auto& function:fl)
   {
-    venv->BeginScope(sym::scope_::PLAIN_SCOPE);
+    //function is in origin scope
     type::Ty* result_ty=type::VoidTy::Instance();
-    if(function->result_) result_ty = tenv->Look(function->result_);
+    if(function->result_) result_ty = tenv->LookScope(function->result_);
     type::TyList* formals=function->params_->MakeFormalTyList(tenv,errormsg);
     venv->Set(function->name_,new env::FunEntry(formals,result_ty));
     auto formal_it=formals->GetList().begin();
     auto param_it=function->params_->GetList().begin();
     auto param_end=function->params_->GetList().end();
+
+    //function in new scope
+    venv->BeginScope(sym::scope_::PLAIN_SCOPE);
     for(;param_it!=param_end;formal_it++,param_it++)
     {
       venv->Enter((*param_it)->name_,new env::VarEntry(*formal_it));
@@ -443,7 +446,7 @@ void VarDec::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv, int labelcount,
   }
   if(this->typ_)
   {
-    type::Ty* t = tenv->Look(this->typ_);
+    type::Ty* t = tenv->LookScope(this->typ_);
     if(t&&ty&&!t->IsSameType(ty))
       errormsg->Error(this->pos_,"type mismatch");
   }
@@ -456,7 +459,7 @@ void VarDec::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv, int labelcount,
     }
   }
   //check var name is same
-  if(nullptr!=venv->Look(this->var_))
+  if(nullptr!=venv->LookScope(this->var_,sym::look_::EXACT_THIS))
   {
     errormsg->Error(this->pos_,"two vars have the same name");
   }
@@ -470,7 +473,7 @@ void TypeDec::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv, int labelcount,
   //put the head into tenv
   for(const auto& nt:ntl)
   {
-    if(nullptr!=tenv->Look(nt->name_))
+    if(nullptr!=tenv->LookScope(nt->name_,sym::look_::EXACT_THIS))
     {
       errormsg->Error(this->pos_,"two types have the same name");
     }
@@ -482,18 +485,18 @@ void TypeDec::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv, int labelcount,
   {
     tenv->Set(nt->name_,nt->ty_->SemAnalyze(tenv,errormsg));
     //detect illegel cycle: fast pointer and slow pointer
-    type::Ty* head=tenv->Look(nt->name_);
+    type::Ty* head=tenv->LookScope(nt->name_);
     type::Ty* fast=head,*slow=head;
 
 
     while(fast!=nullptr&&
     typeid(*fast)==typeid(type::NameTy)&&
-    tenv->Look(static_cast<type::NameTy*>(fast)->sym_)!=nullptr&&
-    typeid(*(tenv->Look(static_cast<type::NameTy*>(fast)->sym_)))==typeid(type::NameTy))
+    tenv->LookScope(static_cast<type::NameTy*>(fast)->sym_)!=nullptr&&
+    typeid(*(tenv->LookScope(static_cast<type::NameTy*>(fast)->sym_)))==typeid(type::NameTy))
     {
-      slow=tenv->Look(static_cast<type::NameTy*>(slow)->sym_);
-      type::Ty* fast_next=tenv->Look(static_cast<type::NameTy*>(fast)->sym_);
-      fast=tenv->Look(static_cast<type::NameTy*>(fast_next)->sym_);
+      slow=tenv->LookScope(static_cast<type::NameTy*>(slow)->sym_);
+      type::Ty* fast_next=tenv->LookScope(static_cast<type::NameTy*>(fast)->sym_);
+      fast=tenv->LookScope(static_cast<type::NameTy*>(fast_next)->sym_);
       if(slow==fast)
       {
         errormsg->Error(this->pos_,"illegal type cycle");
@@ -505,7 +508,7 @@ void TypeDec::SemAnalyze(env::VEnvPtr venv, env::TEnvPtr tenv, int labelcount,
 
 type::Ty *NameTy::SemAnalyze(env::TEnvPtr tenv, err::ErrorMsg *errormsg) const {
   /* TODO: Put your lab4 code here */
-  type::Ty* ty = tenv->Look(this->name_);
+  type::Ty* ty = tenv->LookScope(this->name_);
   if(ty==nullptr)
   {
     errormsg->Error(this->pos_,"undefined type %s",this->name_);
@@ -522,7 +525,7 @@ type::Ty *RecordTy::SemAnalyze(env::TEnvPtr tenv,
  
   for(const auto& f:fl)
   {
-    type::Ty* ty = tenv->Look(f->typ_);
+    type::Ty* ty = tenv->LookScope(f->typ_);
 
     if(ty==nullptr)
     {
@@ -555,7 +558,7 @@ type::Ty *RecordTy::SemAnalyze(env::TEnvPtr tenv,
 type::Ty *ArrayTy::SemAnalyze(env::TEnvPtr tenv,
                               err::ErrorMsg *errormsg) const {
   /* TODO: Put your lab4 code here */
-  type::Ty* ty = tenv->Look(this->array_);
+  type::Ty* ty = tenv->LookScope(this->array_);
   if(ty==nullptr)
   {
     errormsg->Error(this->pos_,"no such type");
