@@ -15,6 +15,7 @@ namespace env {
 class EnvEntry {
 public:
   bool readonly_;
+  int depth;
 
   explicit EnvEntry(bool readonly = true) : readonly_(readonly) {}
   virtual ~EnvEntry() = default;

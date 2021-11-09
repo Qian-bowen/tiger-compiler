@@ -12,6 +12,7 @@ class FieldList;
 
 class Ty {
 public:
+  int depth;
   virtual Ty *ActualTy();
   virtual bool IsSameType(Ty *);
 
