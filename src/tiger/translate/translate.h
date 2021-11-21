@@ -32,11 +32,15 @@ public:
   Level *parent_;
 
   /* TODO: Put your lab5 code here */
+  static Level* NewLevel(tr::Level parent,temp::Label name,std::list<bool> formals);
 };
 
 class ProgTr {
 public:
   // TODO: Put your lab5 code here */
+  ProgTr(std::unique_ptr<absyn::AbsynTree> absyntree, std::unique_ptr<err::ErrorMsg> errormsg);
+
+  Level* outermost(){return main_level_.get();}
 
   /**
    * Translate IR tree

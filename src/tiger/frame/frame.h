@@ -69,6 +69,7 @@ protected:
 class Access {
 public:
   /* TODO: Put your lab5 code here */
+  virtual tree::Exp* ToExp(tree::Exp* framePtr)const=0;
   
   virtual ~Access() = default;
   
@@ -76,6 +77,16 @@ public:
 
 class Frame {
   /* TODO: Put your lab5 code here */
+public:
+  temp::Label* name_;
+  std::list<frame::Access*> formals_;  //incoming arguments
+  std::list<frame::Access*> locals_;   //local variable, on stack or in register
+  int offset_s; //offset is the current position between sp and fp
+
+  virtual Access* AllocLocal(bool is_local)=0;
+  static tree::Exp* Exp(frame::Access* access,tree::Exp* framePtr);
+  static frame::Frame* NewFrame(temp::Label* name,std::list<bool> formals);
+
 };
 
 /**

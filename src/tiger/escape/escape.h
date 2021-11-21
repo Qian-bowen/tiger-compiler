@@ -17,7 +17,7 @@ public:
   int depth_;
   bool *escape_;
 
-  EscapeEntry(int depth, bool *escape) : depth_(depth), escape_(escape) {}
+  EscapeEntry(int depth, bool *escape) : depth_(depth), escape_(escape){}
 };
 
 using EscEnv = sym::Table<esc::EscapeEntry>;

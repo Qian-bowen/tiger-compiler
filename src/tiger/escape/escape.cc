@@ -15,6 +15,7 @@ void AbsynTree::Traverse(esc::EscEnvPtr env) {
 void SimpleVar::Traverse(esc::EscEnvPtr env, int depth) {
   /* TODO: Put your lab5 code here */
   esc::EscapeEntry * ee = env->Look(this->sym_);
+  if(ee==nullptr) return;
   if(depth>ee->depth_)
   {
     *(ee->escape_)=true;
@@ -102,6 +103,8 @@ void WhileExp::Traverse(esc::EscEnvPtr env, int depth) {
 
 void ForExp::Traverse(esc::EscEnvPtr env, int depth) {
   /* TODO: Put your lab5 code here */
+  this->escape_=false;
+  env->Enter(this->var_, new esc::EscapeEntry(depth, &(this->escape_)));
   this->lo_->Traverse(env,depth);
   this->hi_->Traverse(env,depth);
   this->body_->Traverse(env,depth);
@@ -114,15 +117,12 @@ void BreakExp::Traverse(esc::EscEnvPtr env, int depth) {
 
 void LetExp::Traverse(esc::EscEnvPtr env, int depth) {
   /* TODO: Put your lab5 code here */
-  ++depth;
-  env->BeginScope(sym::scope_::PLAIN_SCOPE);
   std::list<absyn::Dec *> dec_list = this->decs_->GetList();
   for(auto& dec:dec_list)
   {
     dec->Traverse(env,depth);
   }
   body_->Traverse(env,depth);
-  env->EndScope();
 }
 
 void ArrayExp::Traverse(esc::EscEnvPtr env, int depth) {
@@ -142,16 +142,23 @@ void FunctionDec::Traverse(esc::EscEnvPtr env, int depth) {
   std::list<absyn::FunDec *> func_list = this->functions_->GetList();
   for(auto& dec:func_list)
   {
-      env->BeginScope(sym::scope_::PLAIN_SCOPE);
-      dec->body_->Traverse(env,depth);
-      env->EndScope();
+    env->BeginScope(sym::PLAIN_SCOPE);
+    std::list<absyn::Field*> param=dec->params_->GetList();
+    for(auto& p:param)
+    {
+      p->escape_=false;
+      //do not check param escape
+      env->Enter(p->name_,new esc::EscapeEntry(depth,&(p->escape_)));
+    }
+    dec->body_->Traverse(env,depth);
+    env->EndScope();
   }
 }
 
 void VarDec::Traverse(esc::EscEnvPtr env, int depth) {
   /* TODO: Put your lab5 code here */
-  bool* escape=new bool(false);
-  env->Enter(this->var_,new esc::EscapeEntry(depth,escape));
+  this->escape_=false;
+  env->Enter(this->var_,new esc::EscapeEntry(depth,&(this->escape_)));
 }
 
 void TypeDec::Traverse(esc::EscEnvPtr env, int depth) {

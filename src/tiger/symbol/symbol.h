@@ -18,7 +18,7 @@ class Ty;
 namespace sym {
 
 //LOOP_SCOPE contains FOR_SCOPE and WHILE_SCOPE
-enum scope_{PLAIN_SCOPE,FOR_SCOPE,WHILE_SCOPE,LOOP_SCOPE};
+enum scope_{PLAIN_SCOPE,FOR_SCOPE,WHILE_SCOPE,LOOP_SCOPE,FUNCDEC_SCOPE};
 enum look_{EXACT_LARGER,EQUAL_LARGER,EXACT_THIS};
 
 class Symbol {
@@ -58,6 +58,7 @@ private:
   Symbol markloop_ = {"<loop>", nullptr};
   Symbol markfor_ = {"<for>", nullptr};
   Symbol markwhile_ = {"<while>", nullptr};
+  Symbol markfuncdec_ = {"<funcdec>", nullptr};
 };
 
 template <typename ValueType> void Table<ValueType>::BeginScope(scope_ scope_mark) {
@@ -75,6 +76,10 @@ template <typename ValueType> void Table<ValueType>::BeginScope(scope_ scope_mar
   else if(scope_mark==scope_::LOOP_SCOPE)
   {
     this->Enter(&markloop_, nullptr);
+  }
+  else if(scope_mark==scope_::FUNCDEC_SCOPE)
+  {
+    this->Enter(&markfuncdec_, nullptr);
   }
   this->depth_++;
 }
@@ -100,6 +105,10 @@ template <typename ValueType> bool Table<ValueType>::IsWithinScope(scope_ scope_
   else if(scope_mark==scope_::WHILE_SCOPE)
   {
     flag=this->IsExist(&markwhile_);
+  }
+  else if(scope_mark==scope_::FUNCDEC_SCOPE)
+  {
+    flag=this->IsExist(&markfuncdec_);
   }
   return flag;
 }

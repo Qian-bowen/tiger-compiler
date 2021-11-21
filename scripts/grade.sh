@@ -147,6 +147,8 @@ test_lab5_part1() {
     testcase_name=$(basename "$testcase" | cut -f1 -d".")
     local ref=${ref_dir}/${testcase_name}.out
 
+    echo "$testcase"
+
     ./test_translate "$testcase" >&/tmp/output.txt
 
     # Check output
