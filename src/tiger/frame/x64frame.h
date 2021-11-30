@@ -12,6 +12,7 @@ namespace frame {
 
 class X64RegManager : public RegManager {
   /* TODO: Put your lab5 code here */
+  X64RegManager(){}
   virtual temp::TempList *Registers()override;
   virtual temp::TempList *ArgRegs()override;
   virtual temp::TempList *CallerSaves()override;
