@@ -15,6 +15,8 @@ namespace frame {
 class RegManager {
 public:
   RegManager() : temp_map_(temp::Map::Empty()) {}
+  virtual ~RegManager(){}
+
 
   temp::Temp *GetRegister(int regno) { return regs_[regno]; }
 

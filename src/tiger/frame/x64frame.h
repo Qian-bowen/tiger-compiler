@@ -12,16 +12,19 @@ namespace frame {
 
 class X64RegManager : public RegManager {
   /* TODO: Put your lab5 code here */
-  X64RegManager(){}
-  virtual temp::TempList *Registers()override;
-  virtual temp::TempList *ArgRegs()override;
-  virtual temp::TempList *CallerSaves()override;
-  virtual temp::TempList *CalleeSaves()override;
-  virtual temp::TempList *ReturnSink()override;
-  virtual int WordSize()override;
-  virtual temp::Temp *FramePointer()override;
-  virtual temp::Temp *StackPointer()override;
-  virtual temp::Temp *ReturnValue()override;
+public:
+  X64RegManager():RegManager(){}
+  virtual ~X64RegManager(){}
+
+  virtual temp::TempList *Registers(){return nullptr;}
+  virtual temp::TempList *ArgRegs(){return nullptr;}
+  virtual temp::TempList *CallerSaves(){return nullptr;}
+  virtual temp::TempList *CalleeSaves(){return nullptr;}
+  virtual temp::TempList *ReturnSink(){return nullptr;}
+  virtual int WordSize(){return 0;}
+  virtual temp::Temp *FramePointer(){return nullptr;}
+  virtual temp::Temp *StackPointer(){return nullptr;}
+  virtual temp::Temp *ReturnValue(){return nullptr;}
 };
 
 
