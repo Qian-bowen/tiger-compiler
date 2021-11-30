@@ -52,7 +52,7 @@ public:
   ValueType *LookScope(Symbol *key,look_ look=look_::EQUAL_LARGER);
 
 private:
-  int depth_=0;//depth of scope
+  // int depth_=0;//depth of scope
   Symbol marksym_ = {"<mark>", nullptr};
   
   Symbol markloop_ = {"<loop>", nullptr};
@@ -81,7 +81,7 @@ template <typename ValueType> void Table<ValueType>::BeginScope(scope_ scope_mar
   {
     this->Enter(&markfuncdec_, nullptr);
   }
-  this->depth_++;
+  // this->depth_++;
 }
 
 template <typename ValueType> void Table<ValueType>::EndScope() {
@@ -89,7 +89,7 @@ template <typename ValueType> void Table<ValueType>::EndScope() {
   do
     s = this->Pop();
   while (s != &marksym_);
-  this->depth_--;
+  // this->depth_--;
 }
 
 template <typename ValueType> bool Table<ValueType>::IsWithinScope(scope_ scope_mark) {
@@ -115,13 +115,13 @@ template <typename ValueType> bool Table<ValueType>::IsWithinScope(scope_ scope_
 
 template <typename ValueType> void Table<ValueType>::Enter(Symbol *key, ValueType *value)
 {
-  if(value) value->depth_=this->depth_;
+  // if(value) value->depth_=this->depth_;
   tab::Table<Symbol, ValueType>::Enter(key,value);
 }
 
 template <typename ValueType> void Table<ValueType>::Set(Symbol *key, ValueType *value)
 {
-  if(value) value->depth_=this->depth_;
+  // if(value) value->depth_=this->depth_;
   tab::Table<Symbol, ValueType>::Set(key,value);
 }
 
@@ -139,16 +139,16 @@ template <typename ValueType> void Table<ValueType>::Set(Symbol *key, ValueType 
 template <typename ValueType> ValueType* Table<ValueType>::LookScope(Symbol *key,look_ look)
 {
   ValueType* vt=tab::Table<Symbol, ValueType>::Look(key);
-  if(vt==nullptr) return nullptr;
+  // if(vt==nullptr) return nullptr;
 
-  if(look==look_::EXACT_LARGER&&vt->depth_>=this->depth_)
-  {
-    return nullptr;
-  }
-  else if(look==look_::EXACT_THIS&&vt->depth_!=this->depth_)
-  {
-    return nullptr;
-  }
+  // if(look==look_::EXACT_LARGER&&vt->depth_>=this->depth_)
+  // {
+  //   return nullptr;
+  // }
+  // else if(look==look_::EXACT_THIS&&vt->depth_!=this->depth_)
+  // {
+  //   return nullptr;
+  // }
   return vt;
 }
 
