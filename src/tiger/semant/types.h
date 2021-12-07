@@ -64,6 +64,7 @@ public:
   Ty *ty_;
 
   explicit ArrayTy(Ty *ty) : ty_(ty) {}
+
 };
 
 class NameTy : public Ty {

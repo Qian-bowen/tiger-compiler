@@ -146,6 +146,7 @@ void FunctionDec::Traverse(esc::EscEnvPtr env, int depth) {
     std::list<absyn::Field*> param=dec->params_->GetList();
     for(auto& p:param)
     {
+      // todo error!
       p->escape_=false;
       //do not check param escape
       env->Enter(p->name_,new esc::EscapeEntry(depth,&(p->escape_)));

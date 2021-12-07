@@ -79,18 +79,18 @@ public:
   
 };
 
+
 class Frame {
   /* TODO: Put your lab5 code here */
 public:
-  temp::Label* name_;
-  std::list<frame::Access*> formals_;  //incoming arguments
-  std::list<frame::Access*> locals_;   //local variable, on stack or in register
-  int offset_s; //offset is the current position between sp and fp
+  temp::Label* name;
+  std::list<frame::Access*> formals;  //incoming arguments as can seen inside callee
+  int offset; // how much space has already been allocated
 
+  Frame()=default;
+  virtual ~Frame()=default;
   virtual Access* AllocLocal(bool is_local)=0;
-  static tree::Exp* Exp(frame::Access* access,tree::Exp* framePtr);
-  static frame::Frame* NewFrame(temp::Label* name,std::list<bool> formals);
-
+  virtual std::string GetLabel()=0;
 };
 
 /**
@@ -145,7 +145,14 @@ private:
 };
 
 /* TODO: Put your lab5 code here */
+Frame* newFrame(temp::Label* name,std::list<bool> formals);
 
+tree::Exp* exp(frame::Access* access,tree::Exp* framePtr);
+
+tree::Stm* procEntryExit1(frame::Frame* frame,tree::Stm* stm);
+
+// add prolog and epilog
+assem::Proc* ProcEntryExit3(frame::Frame* frame,assem::InstrList* body);
 } // namespace frame
 
 #endif

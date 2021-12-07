@@ -16,22 +16,28 @@ class Exp;
 class ExpAndTy;
 class Level;
 
+// variable level and how to access it in frame
 class Access {
 public:
   Level *level_;
   frame::Access *access_;
 
-  Access(Level *level, frame::Access *access)
+  explicit Access(Level *level, frame::Access *access)
       : level_(level), access_(access) {}
   static Access *AllocLocal(Level *level, bool escape);
 };
 
+// function frame structure and its parent
 class Level {
 public:
-  frame::Frame *frame_;
+  frame::Frame *frame_; // frame structure of current function
   Level *parent_;
 
   /* TODO: Put your lab5 code here */
+  explicit Level(frame::Frame *frame,Level *parent):frame_(frame),parent_(parent){}
+  std::list<tr::Access*> GetFormals();
+  // static Level* NewLevel(tr::Level* parent,temp::Label* name,std::list<bool> formals); // processing function header
+
 };
 
 class ProgTr {

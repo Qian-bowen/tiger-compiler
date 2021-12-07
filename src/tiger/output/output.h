@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <iostream>
 
 #include "tiger/canon/canon.h"
 #include "tiger/codegen/codegen.h"

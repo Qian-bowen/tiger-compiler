@@ -9,24 +9,36 @@
 
 namespace frame {
 
-
 class X64RegManager : public RegManager {
   /* TODO: Put your lab5 code here */
+  temp::Temp *rax, *rbx, *rcx, *rdx, *rsi, *rdi, *rbp, *rsp, *r8, *r9, *r10,
+      *r11, *r12, *r13, *r14, *r15;
+
 public:
-  X64RegManager():RegManager(){}
-  virtual ~X64RegManager(){}
+  X64RegManager();
+  virtual ~X64RegManager() = default;
 
-  virtual temp::TempList *Registers(){return nullptr;}
-  virtual temp::TempList *ArgRegs(){return nullptr;}
-  virtual temp::TempList *CallerSaves(){return nullptr;}
-  virtual temp::TempList *CalleeSaves(){return nullptr;}
-  virtual temp::TempList *ReturnSink(){return nullptr;}
-  virtual int WordSize(){return 0;}
-  virtual temp::Temp *FramePointer(){return nullptr;}
-  virtual temp::Temp *StackPointer(){return nullptr;}
-  virtual temp::Temp *ReturnValue(){return nullptr;}
+  virtual temp::TempList *Registers() override {
+    return new temp::TempList({rax, rbx, rcx, rdx, rsi, rdi, rbp, rsp, r8, r9,
+                               r10, r11, r12, r13, r14, r15});
+  }
+  virtual temp::TempList *ArgRegs() override {
+    return new temp::TempList({rdi, rsi, rdx, rcx, r8, r9});
+  }
+  virtual temp::TempList *CallerSaves() override {
+    return new temp::TempList({rax, rcx, rdx, rsi, rdi, r8, r9, r10, r11});
+  } // except rsp and callee save reg
+  virtual temp::TempList *CalleeSaves() override {
+    return new temp::TempList({rbx, rbp, r12, r13, r14, r15});
+  }
+  virtual temp::TempList *ReturnSink() override {
+    return new temp::TempList({rsp, rax, rbx, rbp, r12, r13, r14, r15});
+  }
+  virtual int WordSize() override { return 8; } // eight bytes 64 bit address
+  virtual temp::Temp *FramePointer() override { return rbp; }
+  virtual temp::Temp *StackPointer() override { return rsp; }
+  virtual temp::Temp *ReturnValue() override { return rax; }
 };
-
 
 } // namespace frame
 #endif // TIGER_COMPILER_X64FRAME_H
