@@ -105,7 +105,7 @@ public:
     tree::CjumpStm* stm=new tree::CjumpStm(tree::NE_OP,exp_,new tree::ConstExp(0),nullptr,nullptr);
     temp::Label** tp=&stm->true_label_;
     temp::Label** fp=&stm->false_label_;
-    std::cout<<"ex cx tp:"<<tp<<" fp:"<<fp<<std::endl;
+    // std::cout<<"ex cx tp:"<<tp<<" fp:"<<fp<<std::endl;
     return Cx(tp,fp,stm);
   }
 };
@@ -144,7 +144,7 @@ public:
     temp::Temp* r=temp::TempFactory::NewTemp();
     temp::Label* t=temp::LabelFactory::NewLabel();
     temp::Label* f=temp::LabelFactory::NewLabel();
-    std::cout<<"cx ex cxt:"<<cx_.trues_<<" cxf:"<<cx_.falses_<<std::endl;
+    // std::cout<<"cx ex cxt:"<<cx_.trues_<<" cxf:"<<cx_.falses_<<std::endl;
     *(cx_.trues_)=t;
     *(cx_.falses_)=f;
  
@@ -164,7 +164,7 @@ public:
   [[nodiscard]] tree::Stm *UnNx() const override {
     /* TODO: Put your lab5 code here */
     temp::Label* label=temp::LabelFactory::NewLabel();
-    std::cout<<"cx ux cxt:"<<cx_.trues_<<" cxf:"<<cx_.falses_<<std::endl;
+    // std::cout<<"cx ux cxt:"<<cx_.trues_<<" cxf:"<<cx_.falses_<<std::endl;
     *(cx_.trues_)=label;
     *(cx_.falses_)=label;
     return new tree::SeqStm(cx_.stm_,new tree::LabelStm(label)); // convert to exp without return value
@@ -276,7 +276,7 @@ tr::Exp* intCompare(tr::Exp* left,tr::Exp* right,absyn::Oper op)
   {
     case absyn::Oper::EQ_OP:
     {
-      std::cout<<"int cmp eq"<<std::endl;
+      // std::cout<<"int cmp eq"<<std::endl;
       cjumpstm= new tree::CjumpStm(tree::EQ_OP,left->UnEx(),right->UnEx(),nullptr,nullptr);
       break;
       // stm = new tree::CjumpStm(tree::EQ_OP,left->UnEx(),right->UnEx(),t,f);
@@ -284,7 +284,7 @@ tr::Exp* intCompare(tr::Exp* left,tr::Exp* right,absyn::Oper op)
     }
     case absyn::Oper::NEQ_OP:
     {
-      std::cout<<"int cmp not eq"<<std::endl;
+      // std::cout<<"int cmp not eq"<<std::endl;
       cjumpstm= new tree::CjumpStm(tree::NE_OP,left->UnEx(),right->UnEx(),nullptr,nullptr);
       break;
     }
@@ -312,7 +312,7 @@ tr::Exp* intCompare(tr::Exp* left,tr::Exp* right,absyn::Oper op)
   }
   temp::Label** tp=&(cjumpstm->true_label_);
   temp::Label** fp=&(cjumpstm->false_label_);
-  std::cout<<"tp:"<<tp<<" fp:"<<fp<<std::endl;
+  // std::cout<<"tp:"<<tp<<" fp:"<<fp<<std::endl;
   return new tr::CxExp(tp,fp,cjumpstm);
 }
 
@@ -416,7 +416,7 @@ tr::Exp* make_while(tr::Exp* test,tr::Exp* body,temp::Label* done, err::ErrorMsg
   Cx condition=test->UnCx(errormsg);
   temp::Label* test_label=temp::LabelFactory::NewLabel();
   temp::Label* body_label=temp::LabelFactory::NewLabel();
-  std::cout<<"ct:"<<condition.trues_<<" cf:"<<condition.falses_<<std::endl;
+  // std::cout<<"ct:"<<condition.trues_<<" cf:"<<condition.falses_<<std::endl;
   *(condition.trues_)=body_label; // true
   *(condition.falses_)=done;  // false
 
