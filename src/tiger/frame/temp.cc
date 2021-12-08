@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <set>
 #include <sstream>
+#include <iostream>
 
 namespace temp {
 
@@ -31,6 +32,8 @@ Temp *TempFactory::NewTemp() {
   std::stringstream stream;
   stream << 't';
   stream << p->num_;
+  // std::cout<<"enter map:"<<std::string(stream.str())<<std::endl;//
+  // std::cout<<"addr:"<<p<<std::endl;
   Map::Name()->Enter(p, new std::string(stream.str()));
 
   return p;

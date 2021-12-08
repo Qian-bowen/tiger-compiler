@@ -12,6 +12,7 @@ class FieldList;
 
 class Ty {
 public:
+  int depth_;
   virtual Ty *ActualTy();
   virtual bool IsSameType(Ty *);
 
@@ -63,6 +64,7 @@ public:
   Ty *ty_;
 
   explicit ArrayTy(Ty *ty) : ty_(ty) {}
+
 };
 
 class NameTy : public Ty {

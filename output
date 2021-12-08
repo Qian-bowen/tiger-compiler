@@ -1,0 +1,1149 @@
+find src scripts testdata -type f | xargs -I % sh -c 'dos2unix -n % /tmp/tmp; mv -f /tmp/tmp % || true;'
+bash scripts/grade.sh lab5
+========== Lab5 Test ==========
+1,14c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 17, in main
+<     interpreter.run()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 156, in run
+<     self._instructions[pc].execute(self._state_table)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/instruction.py", line 34, in execute
+<     mem_add = state_table.get_mem_address(self._arg1)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/state_table.py", line 283, in get_mem_address
+<     return int(mem[:imm_index], 16) if mem.startswith('0x') else int(mem[:imm_index])
+< ValueError: invalid literal for int() with base 10: 't19-'
+---
+> 3
+Error: Output mismatch [bsearch]
+1,14c1,4
+< 100	->	Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 17, in main
+<     interpreter.run()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 156, in run
+<     self._instructions[pc].execute(self._state_table)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/instruction.py", line 29, in execute
+<     if re.match(OperandEnum.Reg.value, self._arg1):
+<   File "/usr/lib/python3.6/re.py", line 172, in match
+<     return _compile(pattern, flags).match(string)
+< KeyboardInterrupt
+---
+> 100	->	1100100
+> 200	->	11001000
+> 789	->	1100010101
+> 567	->	1000110111
+Error: Output mismatch [dec2bin]
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/merge.tig.s'
+---
+> 1 23 
+Error: Output mismatch [merge/test1]
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/merge.tig.s'
+---
+> 2 
+Error: Output mismatch [merge/test2]
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/merge.tig.s'
+---
+> 3 4 17 19 20 20 12 22 3 6 341 
+Error: Output mismatch [merge/test3]
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/merge.tig.s'
+---
+> 
+Error: Output mismatch [merge/test4]
+1a2,3
+> 1
+> 1
+2a5,8
+> 1
+> 1
+> 1
+> 1
+4,10c10
+< 0
+< 0
+< 0
+< 0
+< 0
+< 0
+< 0
+---
+> 1
+Error: Output mismatch [prime]
+1c1
+< 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 
+---
+> 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 
+Error: Output mismatch [qsort]
+0a1,828
+>  O . . . . . . .
+>  . . . . O . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . O . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . O . . . .
+> 
+>  O . . . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . . O . . . . .
+>  . . . . . . O .
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . O . . .
+> 
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . O . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . . O . . .
+>  . . O . . . . .
+> 
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . O . . . .
+>  . . . . . O . .
+>  . . O . . . . .
+> 
+>  . O . . . . . .
+>  . . . O . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+> 
+>  . O . . . . . .
+>  . . . . O . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . . O . . . .
+> 
+>  . O . . . . . .
+>  . . . . O . . .
+>  . . . . . . O .
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . O . . . . .
+> 
+>  . O . . . . . .
+>  . . . . . O . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . O . . . .
+>  . . . . . . . O
+>  . . O . . . . .
+>  . . . . O . . .
+> 
+>  . O . . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . O . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+> 
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . O . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  O . . . . . . .
+>  . . . O . . . .
+> 
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . . O . . . .
+>  . . . . . O . .
+>  . . O . . . . .
+> 
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . O . . .
+>  . . . . . . O .
+>  . . . O . . . .
+> 
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . O . . . .
+>  . . . . . O . .
+> 
+>  . . O . . . . .
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . O . . . .
+>  . . . . . O . .
+> 
+>  . . O . . . . .
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . . O . . . .
+>  . . . . . . O .
+>  O . . . . . . .
+> 
+>  . . O . . . . .
+>  . . . . O . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+> 
+>  . . O . . . . .
+>  . . . . O . . .
+>  . . . . . . . O
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . O . .
+> 
+>  . . O . . . . .
+>  . . . . . O . .
+>  . O . . . . . .
+>  . . . . O . . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . O . . . .
+> 
+>  . . O . . . . .
+>  . . . . . O . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . . O . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+> 
+>  . . O . . . . .
+>  . . . . . O . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . O . . . .
+> 
+>  . . O . . . . .
+>  . . . . . O . .
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  . . . . . . O .
+>  . O . . . . . .
+> 
+>  . . O . . . . .
+>  . . . . . O . .
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  . . . . . . O .
+>  O . . . . . . .
+> 
+>  . . O . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . . O . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  . O . . . . . .
+> 
+>  . . O . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . . . O . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . O . . . .
+> 
+>  . . O . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+> 
+>  . . O . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  O . . . . . . .
+>  . . . O . . . .
+>  . . . . . O . .
+> 
+>  . . O . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . O . . .
+> 
+>  . . O . . . . .
+>  . . . . . . . O
+>  . . . O . . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . . . . O . .
+>  . O . . . . . .
+>  . . . . O . . .
+> 
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . O . . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . O . . . . .
+>  . . . . . O . .
+> 
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . O . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . O . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+> 
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . O . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . . O .
+> 
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . O . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . . . O . . .
+> 
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . O . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  O . . . . . . .
+> 
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . O . . . . .
+> 
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . O . .
+> 
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . O . . .
+>  . . . . . . O .
+> 
+>  . . . O . . . .
+>  . . . . . O . .
+>  O . . . . . . .
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . O . . . . .
+>  . . . . . . O .
+> 
+>  . . . O . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . O . . .
+> 
+>  . . . O . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  . O . . . . . .
+> 
+>  . . . O . . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . . . O . .
+>  . . O . . . . .
+> 
+>  . . . O . . . .
+>  . . . . . . O .
+>  . . O . . . . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . . O . . .
+>  O . . . . . . .
+>  . . . . . O . .
+> 
+>  . . . O . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . . . O . .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . . . O
+> 
+>  . . . O . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . O . . . . . .
+> 
+>  . . . O . . . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . O . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+> 
+>  . . . O . . . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . . . O . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . O . .
+>  . . O . . . . .
+> 
+>  . . . O . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . O . .
+> 
+>  . . . . O . . .
+>  O . . . . . . .
+>  . . . O . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . O . . . . .
+> 
+>  . . . . O . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . O . . . . .
+>  . . . . . O . .
+> 
+>  . . . . O . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . O . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . O . . . .
+> 
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . O . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+> 
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . O . . . .
+>  . . . . . . O .
+>  . . O . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  O . . . . . . .
+> 
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . . . O . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . O . . . .
+>  . . . . . . . O
+>  . . O . . . . .
+> 
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . . O . . . .
+>  . . . . . . O .
+>  . . O . . . . .
+>  . . . . . O . .
+> 
+>  . . . . O . . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . O . . . .
+>  . . . . . . O .
+> 
+>  . . . . O . . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . . O . . . .
+> 
+>  . . . . O . . .
+>  . . O . . . . .
+>  . . . . . . . O
+>  . . . O . . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . . . . O . .
+>  . O . . . . . .
+> 
+>  . . . . O . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . . O . . . .
+>  . O . . . . . .
+> 
+>  . . . . O . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . O . . . . .
+> 
+>  . . . . O . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . O . . . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . O . .
+> 
+>  . . . . O . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . O . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . O . . . .
+>  . . . . . . . O
+> 
+>  . . . . O . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . O . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . O . . . .
+> 
+>  . . . . O . . .
+>  . . . . . . O .
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . O . . . . . .
+> 
+>  . . . . O . . .
+>  . . . . . . . O
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . O . .
+>  . O . . . . . .
+>  . . . . . . O .
+> 
+>  . . . . O . . .
+>  . . . . . . . O
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . O . .
+>  . . O . . . . .
+> 
+>  . . . . . O . .
+>  O . . . . . . .
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . O . . . . .
+>  . . . . . . O .
+>  . . . O . . . .
+> 
+>  . . . . . O . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . O . . .
+>  . . . . . . . O
+>  . . . O . . . .
+> 
+>  . . . . . O . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . . O . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  . . O . . . . .
+> 
+>  . . . . . O . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . O . . . .
+> 
+>  . . . . . O . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+> 
+>  . . . . . O . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . O . . . .
+>  . . . . . . O .
+> 
+>  . . . . . O . .
+>  . . O . . . . .
+>  . . . . O . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . . O
+> 
+>  . . . . . O . .
+>  . . O . . . . .
+>  . . . . O . . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . O .
+> 
+>  . . . . . O . .
+>  . . O . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . O . . . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . . . O . . .
+> 
+>  . . . . . O . .
+>  . . O . . . . .
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  O . . . . . . .
+>  . . . O . . . .
+> 
+>  . . . . . O . .
+>  . . O . . . . .
+>  . . . . . . O .
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . . O . . .
+> 
+>  . . . . . O . .
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . O . . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . O . . . . .
+> 
+>  . . . . . O . .
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . O . . . . .
+> 
+>  . . . . . O . .
+>  . . . O . . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . . . . . O
+> 
+>  . . . . . O . .
+>  . . . O . . . .
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . . O . . .
+>  . . O . . . . .
+> 
+>  . . . . . O . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  . . O . . . . .
+> 
+>  . . . . . . O .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . O . . .
+> 
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  . . O . . . . .
+>  . . . . . O . .
+> 
+>  . . . . . . O .
+>  . O . . . . . .
+>  . . . . . O . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . O . . . .
+>  . . . . . . . O
+>  . . . . O . . .
+> 
+>  . . . . . . O .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . . . . O . . .
+>  . O . . . . . .
+>  . . . O . . . .
+> 
+>  . . . . . . O .
+>  . . O . . . . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . . O . . .
+>  O . . . . . . .
+>  . . . . . O . .
+>  . . . O . . . .
+> 
+>  . . . . . . O .
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . O . . .
+>  . . . . . . . O
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . O . .
+> 
+>  . . . . . . O .
+>  . . . O . . . .
+>  . O . . . . . .
+>  . . . . . . . O
+>  . . . . . O . .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . O . . .
+> 
+>  . . . . . . O .
+>  . . . . O . . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . O . .
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . O . . . .
+> 
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+>  . . O . . . . .
+>  . . . . . O . .
+> 
+>  . . . . . . . O
+>  . O . . . . . .
+>  . . . . O . . .
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . . O .
+>  . . . O . . . .
+>  . . . . . O . .
+> 
+>  . . . . . . . O
+>  . . O . . . . .
+>  O . . . . . . .
+>  . . . . . O . .
+>  . O . . . . . .
+>  . . . . O . . .
+>  . . . . . . O .
+>  . . . O . . . .
+> 
+>  . . . . . . . O
+>  . . . O . . . .
+>  O . . . . . . .
+>  . . O . . . . .
+>  . . . . . O . .
+>  . O . . . . . .
+>  . . . . . . O .
+>  . . . . O . . .
+> 
+Error: Output mismatch [queens]
+Pass tbi
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/test_array.tig.s'
+---
+> a12
+\ No newline at end of file
+Error: Output mismatch [test_array]
+1,12c1,2
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/test_patch.tig.s'
+---
+> 67
+> 46
+\ No newline at end of file
+Error: Output mismatch [test_patch]
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/tfact.tig.s'
+---
+> 3628800
+\ No newline at end of file
+Error: Output mismatch [tfact]
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/tfo.tig.s'
+---
+> 0123
+\ No newline at end of file
+Error: Output mismatch [tfo]
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/tif.tig.s'
+---
+> 9
+\ No newline at end of file
+Error: Output mismatch [tif]
+1,12c1,2
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/tifn.tig.s'
+---
+> 5
+> 4
+\ No newline at end of file
+Error: Output mismatch [tifn]
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/tlink.tig.s'
+---
+> 5
+\ No newline at end of file
+Error: Output mismatch [tlink]
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/trec.tig.s'
+---
+> 34
+\ No newline at end of file
+Error: Output mismatch [trec]
+1,19c1,9
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 2, in <module>
+<     from client import Client
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/client.py", line 1, in <module>
+<     from cmd import Cmd
+<   File "/usr/lib/python3.6/cmd.py", line 45, in <module>
+<     import string, sys
+<   File "/usr/lib/python3.6/string.py", line 52, in <module>
+<     import re as _re
+<   File "/usr/lib/python3.6/re.py", line 336, in <module>
+<     import copyreg
+<   File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+<   File "<frozen importlib._bootstrap>", line 951, in _find_and_load_unlocked
+<   File "<frozen importlib._bootstrap>", line 894, in _find_spec
+<   File "<frozen importlib._bootstrap_external>", line 1157, in find_spec
+<   File "<frozen importlib._bootstrap_external>", line 1129, in _get_spec
+<   File "<frozen importlib._bootstrap_external>", line 1241, in find_spec
+<   File "<frozen importlib._bootstrap_external>", line 82, in _path_stat
+< KeyboardInterrupt
+---
+> 5
+> 25
+> 33
+> 40
+> 50
+> 55
+> 60
+> 75
+> 80
+\ No newline at end of file
+Error: Output mismatch [tree]
+1,12c1
+< Traceback (most recent call last):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 5, in <module>
+<     class TigerInterpreter(object):
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 21, in TigerInterpreter
+<     main()
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/main.py", line 16, in main
+<     interpreter = Interpreter(file)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 22, in __init__
+<     self._scan_lines(filename)
+<   File "/home/stu/tiger-compiler/scripts/lab5_test/interpreter.py", line 29, in _scan_lines
+<     with open(filename, 'r') as f:
+< FileNotFoundError: [Errno 2] No such file or directory: '/home/stu/tiger-compiler/testdata/lab5or6/testcases/twhi.tig.s'
+---
+> 109876543
+\ No newline at end of file
+Error: Output mismatch [twhi]
+LAB5 SCORE: 5

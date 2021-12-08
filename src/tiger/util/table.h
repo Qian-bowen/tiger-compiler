@@ -8,11 +8,12 @@ namespace tab {
 template <typename KeyType, typename ValueType> class Table {
 public:
   Table() : top_(nullptr), table_() {}
-  void Enter(KeyType *key, ValueType *value);
-  ValueType *Look(KeyType *key);
-  void Set(KeyType *key, ValueType *value);
-  KeyType *Pop();
-  void Dump(std::function<void(KeyType *, ValueType *)> show);
+  virtual void Enter(KeyType *key, ValueType *value);
+  virtual ValueType *Look(KeyType *key);
+  virtual bool IsExist(KeyType *key);
+  virtual void Set(KeyType *key, ValueType *value);
+  virtual KeyType *Pop();
+  virtual void Dump(std::function<void(KeyType *, ValueType *)> show);
 
 protected:
   static const unsigned long TABSIZE = 127;
@@ -47,6 +48,17 @@ ValueType *Table<KeyType, ValueType>::Look(KeyType *key) {
     if (b->key == key)
       return b->value;
   return nullptr;
+}
+template <typename KeyType, typename ValueType>
+bool Table<KeyType, ValueType>::IsExist(KeyType *key)
+{
+  assert(key);
+  unsigned long index = reinterpret_cast<unsigned long>(key) % TABSIZE;
+  Binder *b;
+  for (b = table_[index]; b; b = b->next)
+    if (b->key == key)
+      return true;
+  return false;
 }
 
 template <typename KeyType, typename ValueType>

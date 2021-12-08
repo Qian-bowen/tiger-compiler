@@ -28,6 +28,10 @@ public:
 
 class RegAllocator {
   /* TODO: Put your lab6 code here */
+public:
+  // void RegAlloc(){}
+  // TransferResult(){}
+
 };
 
 } // namespace ra

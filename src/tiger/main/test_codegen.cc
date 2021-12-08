@@ -4,8 +4,8 @@
 #include "tiger/output/logger.h"
 #include "tiger/output/output.h"
 #include "tiger/parse/parser.h"
-#include "tiger/translate/translate.h"
 #include "tiger/semant/semant.h"
+#include "tiger/translate/translate.h"
 
 frame::RegManager *reg_manager;
 frame::Frags *frags;
@@ -25,7 +25,6 @@ int main(int argc, char **argv) {
 
   {
     std::unique_ptr<err::ErrorMsg> errormsg;
-
     {
       // Lab 3: parsing
       TigerLog("-------====Parse=====-----\n");
@@ -65,6 +64,7 @@ int main(int argc, char **argv) {
   }
 
   {
+    // std::cout<<"frag size:"<<frags->GetList().size()<<std::endl;//test
     // Output assembly
     output::AssemGen assem_gen(fname);
     assem_gen.GenAssem(false);

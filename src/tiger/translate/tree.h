@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <list>
 #include <string>
+#include <iostream>
 
 #include "tiger/frame/temp.h"
 
@@ -93,7 +94,12 @@ class LabelStm : public Stm {
 public:
   temp::Label *label_;
 
-  explicit LabelStm(temp::Label *label) : label_(label) {}
+  explicit LabelStm(temp::Label *label) : label_(label) 
+  {
+    if(label==nullptr) assert(0);
+    // std::cout<<"label addr:"<<label<<std::endl;
+    // std::cout<<"name:"<<label_->Name()<<std::endl;
+  }
   ~LabelStm() override;
 
   void Print(FILE *out, int d) const override;

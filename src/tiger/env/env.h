@@ -5,6 +5,8 @@
 #include "tiger/semant/types.h"
 #include "tiger/symbol/symbol.h"
 
+#include <iostream>
+
 // Forward Declarations
 namespace tr {
 class Access;
@@ -15,6 +17,7 @@ namespace env {
 class EnvEntry {
 public:
   bool readonly_;
+  int depth_;
 
   explicit EnvEntry(bool readonly = true) : readonly_(readonly) {}
   virtual ~EnvEntry() = default;
@@ -48,7 +51,10 @@ public:
   // For lab5(translate IR tree)
   FunEntry(tr::Level *level, temp::Label *label, type::TyList *formals,
            type::Ty *result)
-      : formals_(formals), result_(result), level_(level), label_(label) {}
+      : formals_(formals), result_(result), level_(level), label_(label) 
+      {
+        // std::cout<<"fun entry addr:"<<this<<" level:"<<level_<<std::endl;
+      }
 };
 
 using VEnv = sym::Table<env::EnvEntry>;

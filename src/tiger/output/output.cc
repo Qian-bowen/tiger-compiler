@@ -11,6 +11,7 @@ namespace output {
 void AssemGen::GenAssem(bool need_ra) {
   frame::Frag::OutputPhase phase;
 
+
   // Output proc
   phase = frame::Frag::Proc;
   fprintf(out_, ".text\n");
@@ -86,7 +87,7 @@ void ProcFrag::OutputAssem(FILE *out, OutputPhase phase, bool need_ra) const {
   }
 
   TigerLog("-------====Output assembly for %s=====-----\n",
-           frame_->name_->Name().data());
+  frame_->name->Name().data());
 
   assem::Proc *proc = frame::ProcEntryExit3(frame_, il);
   
