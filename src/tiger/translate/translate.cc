@@ -987,7 +987,7 @@ tr::ExpAndTy *ArrayExp::Translate(env::VEnvPtr venv, env::TEnvPtr tenv,
   type::ArrayTy* at_it=static_cast<type::ArrayTy*>(tt);
   if(!(it->ty_)->IsSameType((at_it->ty_)))
   {
-    errormsg->Error(this->pos_,"type mismatch222222");
+    errormsg->Error(this->pos_,"type mismatch");
     return nullptr;
   }
   

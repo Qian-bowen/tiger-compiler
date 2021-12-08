@@ -285,18 +285,15 @@ temp::Temp *CallExp::Munch(assem::InstrList &instr_list, std::string_view fs) {
   // use direct call, namely call label directly
   instr_list.Append(new assem::OperInstr(instr_str,reg_manager->CallerSaves(),used_temp,nullptr));
   instr_list.Append(new assem::MoveInstr("movq `s0, `d0",new temp::TempList({ret_reg}),new temp::TempList({reg_manager->ReturnValue()})));
+  // add rsp if push more args on stack
 
-  // restore args register
-  // arg_cnt=0;
-  // for(const auto& from_reg:protect_regs_list)
-  // {
-  //   instr_list.Append(
-  //     new assem::MoveInstr(
-  //       "movq `s0, `d0",
-  //       new temp::TempList({reg_manager->ArgRegs()->NthTemp(arg_cnt)}),
-  //       new temp::TempList({from_reg})));
-  //   arg_cnt++;
-  // }
+  int used_num = used_temp->GetList().size();
+  int args_reg_num=reg_manager->ArgRegs()->GetList().size();
+  if(used_num>args_reg_num)
+  {
+    std::string add_rsp_instr="addq $"+std::to_string((used_num-args_reg_num)*reg_manager->WordSize())+", `d0";
+    instr_list.Append(new assem::OperInstr(add_rsp_instr,new temp::TempList({reg_manager->StackPointer()}),nullptr,nullptr));
+  }
 
   return ret_reg;
 }
@@ -307,6 +304,7 @@ temp::TempList *ExpList::MunchArgs(assem::InstrList &instr_list, std::string_vie
   std::list<temp::Temp *> tem_list = reg_manager->ArgRegs()->GetList();
   temp::TempList* used_temp=new temp::TempList();
   int tem_reg_max=tem_list.size(),cnt=0;
+  temp::Temp* pos_reg=temp::TempFactory::NewTemp();
   for(const auto& arg:args_list)
   {
     temp::Temp* tem = arg->Munch(instr_list,fs);
@@ -322,11 +320,19 @@ temp::TempList *ExpList::MunchArgs(assem::InstrList &instr_list, std::string_vie
     {
       // push the value to stack
       // no push in lab5, so just sub and move
-      temp::Temp* const_reg=temp::TempFactory::NewTemp();
-      std::string instr_str="movq $"+std::to_string(reg_manager->WordSize())+", `d0";
-      instr_list.Append(new assem::MoveInstr(instr_str,new temp::TempList({const_reg}),nullptr));
-      instr_list.Append(new assem::OperInstr("subq `s0, `d0",new temp::TempList({reg_manager->StackPointer()}),new temp::TempList({const_reg}),nullptr));
-      instr_list.Append(new assem::OperInstr("movq `s0, (`s1)",nullptr,new temp::TempList({tem,reg_manager->StackPointer()}),nullptr));
+      // std::string rsp_copy_str="movq %rsp, `d0";
+      // instr_list.Append(new assem::OperInstr(rsp_copy_str,new temp::TempList({pos_reg}),nullptr,nullptr));
+      // std::string sub_str=std::to_string((cnt-6)*reg_manager->WordSize());
+      // std::string rsp_copy_sub_str="subq $8, `d0";
+      // instr_list.Append(new assem::OperInstr(rsp_copy_sub_str,new temp::TempList({pos_reg}),nullptr,nullptr));
+      // std::string instr_str="movq `s0, (`s1)";
+      // instr_list.Append(new assem::OperInstr(instr_str,new temp::TempList({pos_reg}),new temp::TempList({tem}),nullptr));
+      // temp::Temp* pos_reg=temp::TempFactory::NewTemp();
+
+      std::string sub_rsp="subq $8, %rsp";
+      instr_list.Append(new assem::OperInstr(sub_rsp,new temp::TempList({reg_manager->StackPointer()}),nullptr,nullptr));
+      std::string instr_str="movq `s0, (%rsp)";
+      instr_list.Append(new assem::OperInstr(instr_str,new temp::TempList({reg_manager->StackPointer()}),new temp::TempList({tem}),nullptr));
     }
     ++cnt;
   }

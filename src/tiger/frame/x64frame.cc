@@ -28,7 +28,7 @@ public:
 class X64Frame : public Frame {
   /* TODO: Put your lab5 code here */
 public:
-  int arg_reg_used=0;
+  int arg_reg_used=1; // first is static link by default
   X64Frame():Frame(){};
   virtual ~X64Frame()=default;
   virtual Access* AllocLocal(bool is_local)override;
@@ -111,8 +111,12 @@ X64RegManager::X64RegManager()
 }
 
 /*
+--------
+args pushed on stack
+--------
+return address
 --------rbp(call,frame pointer,begin new frame)
-args convey to frame
+args on stack convey to frame(view shift)
 --------
 local variable
 --------
@@ -156,7 +160,16 @@ tree::Stm* procEntryExit1(frame::Frame* frame,tree::Stm* stm)
     }
     else
     {
-      
+      int arg_num_stk=frame->formals.size()-reg_size;// first static link
+      int serial_on_stack=cnt-(reg_size-1);
+      int stk_offset=(arg_num_stk-serial_on_stack)*reg_manager->WordSize()+reg_manager->WordSize();//skip return address
+  
+      assert(stk_offset>0);
+      tmp=new tree::SeqStm(
+          tmp,
+          new tree::MoveStm(
+            formal->ToExp(new tree::TempExp(reg_manager->FramePointer())),
+            new tree::MemExp(new tree::BinopExp(tree::PLUS_OP,new tree::TempExp(reg_manager->FramePointer()),new tree::ConstExp(stk_offset)))));
     }
     cnt++;
   }
