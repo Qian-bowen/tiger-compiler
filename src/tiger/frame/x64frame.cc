@@ -28,6 +28,7 @@ public:
 class X64Frame : public Frame {
   /* TODO: Put your lab5 code here */
 public:
+  int arg_reg_used=0;
   X64Frame():Frame(){};
   virtual ~X64Frame()=default;
   virtual Access* AllocLocal(bool is_local)override;
@@ -54,13 +55,15 @@ tree::Exp* exp(frame::Access* access,tree::Exp* framePtr)
 Access* X64Frame::AllocLocal(bool is_local)
 {
   frame::Access* acc=nullptr;
-  if(is_local)
+  int args_reg_max=reg_manager->ArgRegs()->GetList().size();
+  if((!is_local)&&(arg_reg_used<args_reg_max))
   {
-    acc=new frame::InFrameAccess(offset);
-    offset-=reg_manager->WordSize(); // attention: large address is upper
+    acc=new frame::InRegAccess(temp::TempFactory::NewTemp());
+    ++arg_reg_used;
   }
   else{
-    acc=new frame::InRegAccess(temp::TempFactory::NewTemp());
+    acc=new frame::InFrameAccess(offset);
+    offset-=reg_manager->WordSize(); // attention: large address is upper
   }
   return acc;
 }
@@ -141,14 +144,20 @@ tree::Stm* procEntryExit1(frame::Frame* frame,tree::Stm* stm)
   tree::Stm* tmp=new tree::ExpStm(new tree::ConstExp(0));
   for(auto& formal:frame->formals)
   {
-    if(cnt>=reg_size) break;
     // to exp's arg is frame pointer
     // offset is negative ,so stack pointer minus offset
-    tmp=new tree::SeqStm(
-      tmp,
-      new tree::MoveStm(
-        formal->ToExp(new tree::TempExp(reg_manager->FramePointer())),
-        new tree::TempExp(reg_manager->ArgRegs()->NthTemp(cnt))));
+    if(cnt<reg_size)
+    {
+       tmp=new tree::SeqStm(
+          tmp,
+          new tree::MoveStm(
+            formal->ToExp(new tree::TempExp(reg_manager->FramePointer())),
+            new tree::TempExp(reg_manager->ArgRegs()->NthTemp(cnt))));
+    }
+    else
+    {
+      
+    }
     cnt++;
   }
   return new tree::SeqStm(tmp,stm);
