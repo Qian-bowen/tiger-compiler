@@ -95,5 +95,6 @@ add_executable(test_codegen "src/tiger/main/test_codegen.cc" ${TIGER_SOURCES} ${
 add_dependencies(test_codegen lex_parse_sources)
 
 # lab 6
+set(CMAKE_BUILD_TYPE "Debug")
 add_executable(tiger-compiler "src/tiger/main/main.cc" ${TIGER_SOURCES} ${TIGER_LEX_PARSE_SOURCES})
 add_dependencies(tiger-compiler lex_parse_sources)

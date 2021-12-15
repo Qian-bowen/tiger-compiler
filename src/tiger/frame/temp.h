@@ -68,6 +68,7 @@ public:
   void Prepend(Temp *t) { temp_list_.push_front(t); }
   [[nodiscard]] Temp *NthTemp(int i) const;
   [[nodiscard]] const std::list<Temp *> &GetList() const { return temp_list_; }
+  std::list<Temp *> &GetRawList()  { return temp_list_; }
 
 private:
   std::list<Temp *> temp_list_;

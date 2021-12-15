@@ -35,6 +35,7 @@ public:
     return new temp::TempList({rsp, rax, rbx, rbp, r12, r13, r14, r15});
   }
   virtual int WordSize() override { return 8; } // eight bytes 64 bit address
+  virtual int GetK() override { return 16;};
   virtual temp::Temp *FramePointer() override { return rbp; }
   virtual temp::Temp *StackPointer() override { return rsp; }
   virtual temp::Temp *ReturnValue() override { return rax; }

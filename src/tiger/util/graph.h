@@ -114,6 +114,13 @@ public:
     return node_list_;
   }
 
+  [[nodiscard]] Node<T>* PopAndRemove() {
+    if(node_list_.empty()) return nullptr;
+    Node<T>* back_node = node_list_.back();
+    this->node_list_.pop_back();
+    return back_node;
+  }
+
 private:
   std::list<Node<T> *> node_list_{};
 };

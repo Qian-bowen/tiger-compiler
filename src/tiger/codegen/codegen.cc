@@ -126,7 +126,7 @@ void MoveStm::Munch(assem::InstrList &instr_list, std::string_view fs) {
   /* TODO: Put your lab5 code here */
   // if src is mem, means read from mem, so just munch it with MemExp, get the value from returned register
   // mem on dst, means store, memExp just means read mem value to register
-  assert(typeid(*src_)==typeid(tree::TempExp));
+  // assert(typeid(*src_)==typeid(tree::TempExp));
   if(typeid(*dst_)==typeid(tree::MemExp))
   {
     temp::Temp* src = src_->Munch(instr_list,fs);

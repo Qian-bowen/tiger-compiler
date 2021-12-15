@@ -59,6 +59,8 @@ public:
    */
   [[nodiscard]] virtual int WordSize() = 0;
 
+  [[nodiscard]] virtual int GetK() = 0;
+
   [[nodiscard]] virtual temp::Temp *FramePointer() = 0;
 
   [[nodiscard]] virtual temp::Temp *StackPointer() = 0;

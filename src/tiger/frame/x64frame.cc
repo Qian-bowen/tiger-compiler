@@ -116,7 +116,7 @@ args pushed on stack
 --------
 return address
 --------rbp(call,frame pointer,begin new frame)
-args on stack convey to frame(view shift)
+args on stack copy to frame(view shift)
 --------
 local variable
 --------
@@ -124,7 +124,6 @@ local variable
 Frame* newFrame(temp::Label* name,std::list<bool> escapes)
 {
   frame::X64Frame* frame=new frame::X64Frame();
-  // not handling spill for now
 
   frame->name=name;
   // for static link

@@ -16,6 +16,8 @@ using INodeListPtr = graph::NodeList<temp::Temp>*;
 using IGraph = graph::Graph<temp::Temp>;
 using IGraphPtr = graph::Graph<temp::Temp>*;
 
+using MovePtrs = std::pair<INodePtr, INodePtr>;
+
 class MoveList {
 public:
   MoveList() = default;
@@ -32,6 +34,8 @@ public:
   }
   MoveList *Union(MoveList *list);
   MoveList *Intersect(MoveList *list);
+
+  MoveList* GetRelatedMove(INodePtr node_ptr);
 
 private:
   std::list<std::pair<INodePtr, INodePtr>> move_list_;
@@ -66,6 +70,8 @@ private:
 
   void LiveMap();
   void InterfGraph();
+
+  INodePtr GetOrCreateNode(temp::Temp* temp);
 };
 
 } // namespace live
