@@ -316,9 +316,9 @@ temp::TempList *ExpList::MunchArgs(assem::InstrList &instr_list, std::string_vie
   for(const auto& arg:args_list)
   {
     temp::Temp* tem = arg->Munch(instr_list,fs);
-    used_temp->Append(tem);
     if(cnt<tem_reg_max)
     {
+      used_temp->Append(reg_manager->ArgRegs()->NthTemp(cnt));
       // move result of parameter to args register
       instr_list.Append(new assem::MoveInstr("movq `s0, `d0",
         new temp::TempList({reg_manager->ArgRegs()->NthTemp(cnt)}),
