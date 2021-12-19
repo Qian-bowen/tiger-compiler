@@ -89,6 +89,9 @@ X64RegManager::X64RegManager()
   r14=temp::TempFactory::NewTemp();
   r15=temp::TempFactory::NewTemp();
 
+  std::cout<<"rax int:"<<rax->Int()<<std::endl;
+  std::cout<<"r15 int:"<<r15->Int()<<std::endl;
+
   regs_=std::vector<temp::Temp*>{rax, rbx, rcx, rdx, rsi, rdi, rbp, rsp, r8, r9, r10, r11, r12, r13, r14, r15};
   
   // register mapping, override origin mapping
@@ -108,6 +111,23 @@ X64RegManager::X64RegManager()
   temp::Map::Name()->Enter(r13,new std::string("%r13"));
   temp::Map::Name()->Enter(r14,new std::string("%r14"));
   temp::Map::Name()->Enter(r15,new std::string("%r15"));
+
+  temp_map_->Enter(rax,new std::string("%rax"));
+  temp_map_->Enter(rbx,new std::string("%rbx"));
+  temp_map_->Enter(rcx,new std::string("%rcx"));
+  temp_map_->Enter(rdx,new std::string("%rdx"));
+  temp_map_->Enter(rsi,new std::string("%rsi"));
+  temp_map_->Enter(rdi,new std::string("%rdi"));
+  temp_map_->Enter(rbp,new std::string("%rbp"));
+  temp_map_->Enter(rsp,new std::string("%rsp"));
+  temp_map_->Enter(r8,new std::string("%r8"));
+  temp_map_->Enter(r9,new std::string("%r9"));
+  temp_map_->Enter(r10,new std::string("%r10"));
+  temp_map_->Enter(r11,new std::string("%r11"));
+  temp_map_->Enter(r12,new std::string("%r12"));
+  temp_map_->Enter(r13,new std::string("%r13"));
+  temp_map_->Enter(r14,new std::string("%r14"));
+  temp_map_->Enter(r15,new std::string("%r15"));
 }
 
 /*

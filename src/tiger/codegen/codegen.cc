@@ -31,16 +31,20 @@ void CodeGen::Codegen() {
 
   // protect
   // move the callee save regs value to other regs, for its callee's responsibility to protect them
-  for(const auto& reg:callee_regs)
+  if(this->frame_->name->Name()!="tigermain")
   {
-    temp::Temp* to_reg=temp::TempFactory::NewTemp();
-    protect_regs_list.push_back(to_reg);
-    assem_instr_->GetInstrList()->Append(
-      new assem::MoveInstr(
-        "movq `s0, `d0",
-        new temp::TempList({to_reg}),
-        new temp::TempList({reg})));
+    for(const auto& reg:callee_regs)
+    {
+      temp::Temp* to_reg=temp::TempFactory::NewTemp();
+      protect_regs_list.push_back(to_reg);
+      assem_instr_->GetInstrList()->Append(
+        new assem::MoveInstr(
+          "movq `s0, `d0",
+          new temp::TempList({to_reg}),
+          new temp::TempList({reg})));
+    }
   }
+  
 
   // munch
   std::list<tree::Stm *> stm_list = traces_->GetStmList()->GetList();
@@ -51,18 +55,21 @@ void CodeGen::Codegen() {
 
 
   // restore value to callee save rigister
-  assert(callee_regs.size()==protect_regs_list.size());
+  // assert(callee_regs.size()==protect_regs_list.size());
   int count=0;
-  for(const auto& reg:callee_regs)
+  if(this->frame_->name->Name()!="tigermain")
   {
-    assem_instr_->GetInstrList()->Append(
-      new assem::MoveInstr(
-        "movq `s0, `d0",
-        new temp::TempList({reg}),
-        new temp::TempList({protect_regs_list[count]})));
-    count++;
+    for(const auto& reg:callee_regs)
+    {
+      assem_instr_->GetInstrList()->Append(
+        new assem::MoveInstr(
+          "movq `s0, `d0",
+          new temp::TempList({reg}),
+          new temp::TempList({protect_regs_list[count]})));
+      count++;
+    }
   }
-
+  
   // program exit
   // rsp,rax, and all callee save reigsters still active, can not be used for other purpose
   assem_instr_->GetInstrList()->Append(
@@ -133,7 +140,7 @@ void MoveStm::Munch(assem::InstrList &instr_list, std::string_view fs) {
     tree::MemExp* dst = static_cast<tree::MemExp*>(dst_);
     // get the register of dst exp directly
     temp::Temp* dst_exp_reg = dst->exp_->Munch(instr_list,fs);
-    instr_list.Append(new assem::OperInstr("movq `s0, (`s1)",nullptr,new temp::TempList({src,dst_exp_reg}),nullptr));
+    instr_list.Append(new assem::MoveInstr("movq `s0, (`s1)",nullptr,new temp::TempList({src,dst_exp_reg})));
     return;
   }
   else if(typeid(*dst_)==typeid(tree::TempExp))
@@ -206,7 +213,7 @@ temp::Temp *MemExp::Munch(assem::InstrList &instr_list, std::string_view fs) {
   // the result of memory operation store to another register
   temp::Temp* reg = temp::TempFactory::NewTemp();
   temp::Temp* exp_reg = exp_->Munch(instr_list,fs);
-  instr_list.Append(new assem::OperInstr("movq (`s0), `d0",new temp::TempList({reg}),new temp::TempList({exp_reg}),nullptr));
+  instr_list.Append(new assem::MoveInstr("movq (`s0), `d0",new temp::TempList({reg}),new temp::TempList({exp_reg})));
   return reg;
 }
 
@@ -247,7 +254,7 @@ temp::Temp *ConstExp::Munch(assem::InstrList &instr_list, std::string_view fs) {
   /* TODO: Put your lab5 code here */
   temp::Temp* reg = temp::TempFactory::NewTemp();
   std::string instr_str="movq $"+std::to_string(consti_)+", `d0";
-  instr_list.Append(new assem::OperInstr(instr_str,new temp::TempList({reg}),nullptr,nullptr));
+  instr_list.Append(new assem::MoveInstr(instr_str,new temp::TempList({reg}),nullptr));
   return reg;
 }
 
@@ -273,6 +280,8 @@ temp::Temp *CallExp::Munch(assem::InstrList &instr_list, std::string_view fs) {
   //       new temp::TempList({reg})));
   //   ++arg_cnt;
   // }
+
+  // caller save registers
 
   // handle all args correctly before call
   // used_temp is for liveness analysis later
@@ -332,7 +341,7 @@ temp::TempList *ExpList::MunchArgs(assem::InstrList &instr_list, std::string_vie
       std::string sub_rsp="subq $8, %rsp";
       instr_list.Append(new assem::OperInstr(sub_rsp,new temp::TempList({reg_manager->StackPointer()}),nullptr,nullptr));
       std::string instr_str="movq `s0, (%rsp)";
-      instr_list.Append(new assem::OperInstr(instr_str,new temp::TempList({reg_manager->StackPointer()}),new temp::TempList({tem}),nullptr));
+      instr_list.Append(new assem::MoveInstr(instr_str,new temp::TempList({reg_manager->StackPointer()}),new temp::TempList({tem})));
     }
     ++cnt;
   }

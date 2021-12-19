@@ -18,8 +18,9 @@ public:
   X64RegManager();
   virtual ~X64RegManager() = default;
 
+  // no rsp
   virtual temp::TempList *Registers() override {
-    return new temp::TempList({rax, rbx, rcx, rdx, rsi, rdi, rbp, rsp, r8, r9,
+    return new temp::TempList({rax, rbx, rcx, rdx, rsi, rdi, rbp, r8, r9,
                                r10, r11, r12, r13, r14, r15});
   }
   virtual temp::TempList *ArgRegs() override {
@@ -32,10 +33,10 @@ public:
     return new temp::TempList({rbx, rbp, r12, r13, r14, r15});
   }
   virtual temp::TempList *ReturnSink() override {
-    return new temp::TempList({rsp, rax, rbx, rbp, r12, r13, r14, r15});
+    return new temp::TempList({rsp, rax});
   }
   virtual int WordSize() override { return 8; } // eight bytes 64 bit address
-  virtual int GetK() override { return 16;};
+  virtual int GetK() override { return 15;}// no rsp
   virtual temp::Temp *FramePointer() override { return rbp; }
   virtual temp::Temp *StackPointer() override { return rsp; }
   virtual temp::Temp *ReturnValue() override { return rax; }

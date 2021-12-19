@@ -2,26 +2,36 @@
 
 namespace fg {
 
+void InstrTypeChecking(assem::Instr * instr)
+{
+  if(typeid(*instr)==typeid(assem::LabelInstr)) return;
+  if(typeid(*instr)==typeid(assem::MoveInstr)) return;
+  if(typeid(*instr)==typeid(assem::OperInstr)) return;
+  assert(0);
+}
+
 void FlowGraphFactory::AssemFlowGraph() {
   /* TODO: Put your lab6 code here */
   std::list<assem::Instr *> instrs = instr_list_->GetList();
   FNodePtr prev_node = nullptr;
   for(const auto instr:instrs)
   {
+    InstrTypeChecking(instr);
     FNodePtr node = flowgraph_->NewNode(instr);
 
     if(prev_node){
+      InstrTypeChecking(node->NodeInfo());
+      InstrTypeChecking(prev_node->NodeInfo());
       flowgraph_->AddEdge(prev_node,node);
     }
 
     if(typeid(*instr)==typeid(assem::LabelInstr)){
       assem::LabelInstr* label_instr=static_cast<assem::LabelInstr*>(instr);
-      label_map_->Enter(label_instr->label_,node);
+      label_map_[label_instr->label_]=node;
     }
 
     if((typeid(*instr)==typeid(assem::OperInstr))
       &&(((assem::OperInstr*)instr)->assem_.find("jmp")==0)){
-      assem::OperInstr* oper_instr=static_cast<assem::OperInstr*>(instr);
       // not set prev if cur is jump
       prev_node=nullptr;
     }else{
@@ -33,10 +43,11 @@ void FlowGraphFactory::AssemFlowGraph() {
   for(const auto node:node_list)
   {
     assem::Instr * instr = node->NodeInfo();
+    InstrTypeChecking(instr);
     if((typeid(*instr)==typeid(assem::OperInstr))
       && (((assem::OperInstr*)instr)->jumps_))
     {
-      assem::Targets * targets = ((assem::OperInstr*)instr)->jumps_;
+      assem::Targets* targets = ((assem::OperInstr*)instr)->jumps_;
       assert(targets!=nullptr);
       if(targets->labels_!=nullptr)
       {
@@ -44,7 +55,9 @@ void FlowGraphFactory::AssemFlowGraph() {
         assert(0!=labels.size());
         for(const auto label:labels)
         {
-          flowgraph_->AddEdge(node,label_map_->Look(label));
+          InstrTypeChecking(node->NodeInfo());
+          InstrTypeChecking(label_map_[label]->NodeInfo());
+          flowgraph_->AddEdge(node,label_map_[label]);
         }
       }
     }
@@ -62,11 +75,13 @@ temp::TempList *LabelInstr::Def() const {
 
 temp::TempList *MoveInstr::Def() const {
   /* TODO: Put your lab6 code here */
+  if(dst_==nullptr) return new temp::TempList();
   return dst_;
 }
 
 temp::TempList *OperInstr::Def() const {
   /* TODO: Put your lab6 code here */
+  if(dst_==nullptr) return new temp::TempList();
   return dst_;
 }
 
@@ -77,11 +92,13 @@ temp::TempList *LabelInstr::Use() const {
 
 temp::TempList *MoveInstr::Use() const {
   /* TODO: Put your lab6 code here */
+  if(src_==nullptr) return new temp::TempList();
   return src_;
 }
 
 temp::TempList *OperInstr::Use() const {
   /* TODO: Put your lab6 code here */
+  if(src_==nullptr) return new temp::TempList();
   return src_;
 }
 } // namespace assem

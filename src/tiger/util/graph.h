@@ -104,7 +104,7 @@ public:
   void DeleteNode(Node<T> *n);
   void Clear() { node_list_.clear(); }
   void Prepend(Node<T> *n) { node_list_.push_front(n); }
-  void Append(Node<T> *n) { node_list_.push_back(n); }
+  void Append(Node<T> *n) { if(!Contain(n)) node_list_.push_back(n); }
 
   // Set operation on two lists
   NodeList<T> *Union(NodeList<T> *nl);
@@ -178,8 +178,16 @@ template <typename T> int Node<T>::Degree() { return InDegree() + OutDegree(); }
 
 template <typename T> NodeList<T> *Node<T>::Adj() {
   NodeList<T> *adj_list = new NodeList<T>();
-  adj_list->CatList(succs_);
-  adj_list->CatList(preds_);
+  // adj_list->CatList(succs_);
+  // adj_list->CatList(preds_);
+  for(auto adj:succs_->GetList())
+  {
+    if(!adj_list->Contain(adj)) {adj_list->Append(adj);}
+  }
+  for(auto adj:preds_->GetList())
+  {
+    if(!adj_list->Contain(adj)) {adj_list->Append(adj);}
+  }
   return adj_list;
 }
 

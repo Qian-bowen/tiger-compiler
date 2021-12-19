@@ -74,7 +74,16 @@ public:
   void Append(assem::Instr *instr) { instr_list_.push_back(instr); }
   void Remove(assem::Instr *instr) { instr_list_.remove(instr); }
   void Insert(std::list<Instr *>::const_iterator pos, assem::Instr *instr) {
-    instr_list_.insert(pos, instr);
+    instr_list_.emplace(pos, instr);
+  }
+  void Replace(assem::Instr *old,assem::Instr *ne){
+    for(auto& instr:instr_list_)
+    {
+      if(old==instr) {
+        instr=ne;
+        break;
+      }
+    }
   }
   [[nodiscard]] const std::list<Instr *> &GetList() const {
     return instr_list_;

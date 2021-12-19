@@ -16,7 +16,12 @@ void AssemGen::GenAssem(bool need_ra) {
   phase = frame::Frag::Proc;
   fprintf(out_, ".text\n");
   for (auto &&frag : frags->GetList())
+  {
+    std::cout<<"frag"<<std::endl;
+    std::cout<<"name:"<<std::string(typeid(*frag).name())<<std::endl;
+    assert(frag!=nullptr);
     frag->OutputAssem(out_, phase, need_ra);
+  }
 
   // Output string
   phase = frame::Frag::String;
@@ -79,11 +84,13 @@ void ProcFrag::OutputAssem(FILE *out, OutputPhase phase, bool need_ra) const {
   if (need_ra) {
     // Lab 6: register allocation
     TigerLog("----====Register allocate====-----\n");
-    ra::RegAllocator reg_allocator(frame_, std::move(assem_instr));
+    // std::cout<<"instrs before pass:"<<(assem_instr.get())->GetInstrList()->GetList().size()<<std::endl;//test
+    ra::RegAllocator reg_allocator(frame_, assem_instr.get());
     reg_allocator.RegAlloc();
     allocation = reg_allocator.TransferResult();
     il = allocation->il_;
     color = temp::Map::LayerMap(reg_manager->temp_map_, allocation->coloring_);
+    std::cout<<"li size:"<<il->GetList().size()<<std::endl;
   }
 
   TigerLog("-------====Output assembly for %s=====-----\n",
@@ -98,6 +105,8 @@ void ProcFrag::OutputAssem(FILE *out, OutputPhase phase, bool need_ra) const {
   // prologue
   fprintf(out, "%s", proc->prolog_.data());
   // body
+  // assert(color!=nullptr);
+  // std::cout<<"body instr:"<<proc->body_->GetList().size()<<std::endl;//test
   proc->body_->Print(out, color);
   // epilog_
   fprintf(out, "%s", proc->epilog_.data());

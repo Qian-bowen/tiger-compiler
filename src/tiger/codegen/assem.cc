@@ -88,6 +88,7 @@ static std::string Format(std::string_view assem, temp::TempList *dst,
 }
 
 void OperInstr::Print(FILE *out, temp::Map *m) const {
+  // std::cout<<"oper assem:"<<assem_<<std::endl;//
   std::string result = Format(assem_, dst_, src_, jumps_, m);
   fprintf(out, "%s\n", result.data());
 }
@@ -101,7 +102,7 @@ void LabelInstr::Print(FILE *out, temp::Map *m) const {
 
 void MoveInstr::Print(FILE *out, temp::Map *m) const {
   // std::cout<<"move print"<<std::endl;//
-  // std::cout<<"assem:"<<assem_<<std::endl;//
+  // std::cout<<"move assem:"<<assem_<<std::endl;//
   // assert((dst_!=NULL)&&(src_!=NULL));//
   // std::cout<<dst_->GetList().size()<<" "<<src_->GetList().size()<<std::endl;
 
@@ -123,8 +124,17 @@ void MoveInstr::Print(FILE *out, temp::Map *m) const {
 }
 
 void InstrList::Print(FILE *out, temp::Map *m) const {
+  // assert(instr_list_.size()!=0);
+  // int cnt=0;//
+  // std::cout<<"instrs print size:"<<instr_list_.size()<<std::endl;
   for (auto instr : instr_list_)
+  {
+    // std::cout<<"print:"<<cnt++<<std::endl;
+    // assert(instr!=nullptr);
+    // std::string s(typeid(*instr).name());
+    // std::cout<<s<<" "<<std::endl;
     instr->Print(out, m);
+  }
   fprintf(out, "\n");
 }
 

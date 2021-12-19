@@ -34,10 +34,13 @@ class RegAllocator {
   /* TODO: Put your lab6 code here */
 
   frame::Frame* frame;
-  std::unique_ptr<cg::AssemInstr> assem_instr;
+  // std::unique_ptr<cg::AssemInstr> assem_instr;
+  cg::AssemInstr* assem_instr;
 
   fg::FlowGraphFactory* flow_graph_factory;
   live::LiveGraphFactory* live_graph_factory;
+
+  // live::IGraphPtr conflict_graph;
 
   live::INodeListPtr simplifyWorklist;
   live::INodeListPtr freezeWorklist;
@@ -61,12 +64,12 @@ class RegAllocator {
   std::unordered_map<live::INodePtr,std::string*>* color;
 
   
-  std::set<live::INodePtr>* precolored;
+  std::set<temp::Temp*>* precolored;
   std::set<temp::Temp*>* noSpillingTemp;
 
   Result* result;
 
-  void Main(frame::Frame* f,assem::InstrList* instrs);
+  void Main();
 
   void Build();
   void MakeWorklist();
@@ -92,17 +95,17 @@ class RegAllocator {
   void SelectSpill();
 
   void AssignColors();
-  void RewriteProgram(frame::Frame* f,assem::InstrList* instrs);
+  void RewriteProgram();
 
   //util function
-  live::INodeListPtr SetToList(std::set<live::INodePtr>* set_);
+  // live::INodeListPtr SetToList(std::unordered_map<live::INodePtr,std::string*>* set_);
   bool Contain(temp::TempList* temp_list,temp::Temp* temp);
-  temp::Map* ToMap(std::unordered_map<live::INodePtr,std::string*>* color);
+  // temp::Map* ToMap(std::unordered_map<live::INodePtr,std::string*>* color);
 
 
 public:
-  explicit RegAllocator(frame::Frame* frame_,std::unique_ptr<cg::AssemInstr> assem_instr_);
-  void RegAlloc(){Main(frame,assem_instr.get()->GetInstrList());}
+  explicit RegAllocator(frame::Frame* frame_,cg::AssemInstr* assem_instr_);
+  void RegAlloc(){Main();}
   std::unique_ptr<ra::Result> TransferResult(){return std::unique_ptr<ra::Result>(result);}
 
 };
