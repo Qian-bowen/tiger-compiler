@@ -29,21 +29,21 @@ void CodeGen::Codegen() {
   assem::InstrList* instr_list=new assem::InstrList();
   assem_instr_=std::make_unique<AssemInstr>(instr_list);
 
+
   // protect
   // move the callee save regs value to other regs, for its callee's responsibility to protect them
-  if(this->frame_->name->Name()!="tigermain")
+
+  for(const auto& reg:callee_regs)
   {
-    for(const auto& reg:callee_regs)
-    {
-      temp::Temp* to_reg=temp::TempFactory::NewTemp();
-      protect_regs_list.push_back(to_reg);
-      assem_instr_->GetInstrList()->Append(
-        new assem::MoveInstr(
-          "movq `s0, `d0",
-          new temp::TempList({to_reg}),
-          new temp::TempList({reg})));
-    }
+    temp::Temp* to_reg=temp::TempFactory::NewTemp();
+    protect_regs_list.push_back(to_reg);
+    assem_instr_->GetInstrList()->Append(
+      new assem::MoveInstr(
+        "movq `s0, `d0",
+        new temp::TempList({to_reg}),
+        new temp::TempList({reg})));
   }
+  
   
 
   // munch
@@ -57,18 +57,17 @@ void CodeGen::Codegen() {
   // restore value to callee save rigister
   // assert(callee_regs.size()==protect_regs_list.size());
   int count=0;
-  if(this->frame_->name->Name()!="tigermain")
+
+  for(const auto& reg:callee_regs)
   {
-    for(const auto& reg:callee_regs)
-    {
-      assem_instr_->GetInstrList()->Append(
-        new assem::MoveInstr(
-          "movq `s0, `d0",
-          new temp::TempList({reg}),
-          new temp::TempList({protect_regs_list[count]})));
-      count++;
-    }
+    assem_instr_->GetInstrList()->Append(
+      new assem::MoveInstr(
+        "movq `s0, `d0",
+        new temp::TempList({reg}),
+        new temp::TempList({protect_regs_list[count]})));
+    count++;
   }
+  
   
   // program exit
   // rsp,rax, and all callee save reigsters still active, can not be used for other purpose
