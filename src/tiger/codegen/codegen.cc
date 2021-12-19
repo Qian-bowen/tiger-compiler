@@ -295,7 +295,7 @@ temp::Temp *CallExp::Munch(assem::InstrList &instr_list, std::string_view fs) {
   instr_list.Append(new assem::MoveInstr("movq `s0, `d0",new temp::TempList({ret_reg}),new temp::TempList({reg_manager->ReturnValue()})));
   // add rsp if push more args on stack
 
-  int used_num = used_temp->GetList().size();
+  int used_num = this->args_->GetList().size();
   int args_reg_num=reg_manager->ArgRegs()->GetList().size();
   if(used_num>args_reg_num)
   {
