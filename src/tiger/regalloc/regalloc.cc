@@ -211,6 +211,8 @@ void RegAllocator::MakeWorklist()
     std::list<live::INodePtr> nodes = live_graph.interf_graph->Nodes()->GetList();
     for(const auto n:nodes)
     {
+        // attention! precolored node should never add to worklist
+        if(precolored->count(n->NodeInfo())) continue;
         std::cout<<"make:"<<n->NodeInfo()->Int()<<" ";
         if((*degree)[n]>=reg_manager->GetK())
         {
@@ -366,8 +368,7 @@ void RegAllocator::Coalesce()
 
 void RegAllocator::AddWorkList(live::INodePtr n)
 {
-    // book p180 is wrong precolored->color
-    if((!color->count(n))
+    if((!precolored->count(n->NodeInfo()))
         &&(!MoveRelated(n))
         &&((*degree)[n]<reg_manager->GetK()))
     {
